@@ -77,6 +77,7 @@ func (r *RunConfig) trashbinClientSocketFunc() {
 			if writeMsgErr != nil {
 				log.Println("Err: unable to send write msg:", writeMsgErr.Error())
 				return
+			}
 		case <-interrupt:
 			log.Println("Warn: interrupting message to shut down server")
 			writeMsgErr := c.WriteMessage(
