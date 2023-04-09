@@ -6,7 +6,6 @@ require (
 	github.com/gorilla/websocket v1.5.0
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/urfave/cli/v2 v2.25.1
-	golang.org/x/net v0.7.0
 )
 
 require (

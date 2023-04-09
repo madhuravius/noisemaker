@@ -10,8 +10,9 @@ import (
 	"time"
 
 	gorilla_ws "github.com/gorilla/websocket"
-	"golang.org/x/net/websocket"
 )
+
+var upgrader = gorilla_ws.Upgrader{} // use default options
 
 func (r *RunConfig) generateSocketDataToSend() {
 	r.socketData = make([]byte, int64(FileSizeToSend*1024*1024))
@@ -19,17 +20,27 @@ func (r *RunConfig) generateSocketDataToSend() {
 }
 
 // trashbinServerSocketFunc - send data on server
-func trashbinServerSocketFunc(ws *websocket.Conn) {
-	var err error
+func trashbinServerSocketFunc(w http.ResponseWriter, r *http.Request) {
+	c, err := upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		log.Print("Err on conn upgrade:", err)
+		return
+	}
+	defer func(c *gorilla_ws.Conn) {
+		closeErr := c.Close()
+		if closeErr != nil {
+			log.Print("Err on close:", closeErr.Error())
+		}
+	}(c)
 	for {
-		var reply string
-		if err = websocket.Message.Receive(ws, &reply); err != nil {
-			log.Println("Err: Unable to receive messages: ", err.Error())
+		mt, message, errMsgRead := c.ReadMessage()
+		if errMsgRead != nil {
+			log.Println("read:", errMsgRead)
 			break
 		}
-
-		if err = websocket.Message.Send(ws, reply); err != nil {
-			log.Println("Err: Unable to send messages: ", err.Error())
+		err = c.WriteMessage(mt, message)
+		if err != nil {
+			log.Println("write:", err)
 			break
 		}
 	}
@@ -44,7 +55,7 @@ func (r *RunConfig) trashbinClientSocketFunc() {
 	u := url.URL{Scheme: "ws", Host: fmt.Sprintf("localhost:%d", r.desiredPort), Path: "/"}
 	c, _, err := gorilla_ws.DefaultDialer.Dial(u.String(), nil)
 	if err != nil {
-		log.Fatal("dial:", err)
+		log.Fatal("Err on dial: ", err.Error())
 	}
 	defer func(c *gorilla_ws.Conn) {
 		wsErr := c.Close()
@@ -90,7 +101,7 @@ func (r *RunConfig) trashbinClientSocketFunc() {
 
 // startHttpServer - start http server with websocket
 func (r *RunConfig) startHttpServer() {
-	http.Handle("/", websocket.Handler(trashbinServerSocketFunc))
+	http.HandleFunc("/", trashbinServerSocketFunc)
 	log.Printf("Starting web server on :%d\n", r.desiredPort)
 	if err := http.ListenAndServe(fmt.Sprintf(":%d", r.desiredPort), nil); err != nil {
 		log.Fatal("ListenAndServe:", err)

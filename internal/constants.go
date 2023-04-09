@@ -10,5 +10,5 @@ const (
 	PortContextKey      = "port"
 	DebugLogInterval    = time.Second * 3
 	CPUPollingTime      = time.Millisecond * 10
-	FileSizeToSend      = 1 // MB
+	FileSizeToSend      = 100 // MB
 )
