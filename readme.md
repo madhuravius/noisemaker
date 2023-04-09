@@ -14,7 +14,7 @@ to work.
 Should work with the image alone:
 
 ```sh
-podman run ghcr.io/madhuravius/trashbin:v0.1.2 run
+podman run ghcr.io/madhuravius/trashbin:v0.1.3 run
 ```
 
 ### CLI
