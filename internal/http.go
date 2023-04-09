@@ -3,40 +3,44 @@ package internal
 import (
 	"crypto/rand"
 	"fmt"
-	"golang.org/x/net/websocket"
+	"log"
+	"net/http"
 
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
+	"golang.org/x/net/websocket"
 )
 
-func dataToSend() []byte {
-	data := make([]byte, int64(FileSizeToSend*1024*1024))
-	_, _ = rand.Read(data)
-	return data
+func (r *RunConfig) generateSocketDataToSend() {
+	r.socketData = make([]byte, int64(FileSizeToSend*1024*1024))
+	_, _ = rand.Read(r.socketData)
 }
 
-// send data on server
-func trashbinServerSocketFunc(c echo.Context) error {
-	websocket.Handler(func(ws *websocket.Conn) {
-		defer func(ws *websocket.Conn) {
-			_ = ws.Close()
-		}(ws)
-		for {
-			// Write
-			err := websocket.Message.Send(ws, dataToSend())
-			if err != nil {
-				c.Logger().Error(err)
-			}
+// trashbinServerSocketFunc - send data on server
+func trashbinServerSocketFunc(ws *websocket.Conn) {
+	var err error
+	for {
+		var reply string
+		if err = websocket.Message.Receive(ws, &reply); err != nil {
+			log.Println("Err: Unable to receive messages: ", err.Error())
+			break
 		}
-	}).ServeHTTP(c.Response(), c.Request())
-	return nil
+
+		msg := reply
+		if err = websocket.Message.Send(ws, msg); err != nil {
+			log.Println("Err: Unable to send messages: ", err.Error())
+			break
+		}
+	}
 }
+
+// send data from client
+
+// divide file into equal chunks to ensure speed
 
 // startHttpServer - start http server with websocket
 func (r *RunConfig) startHttpServer() {
-	e := echo.New()
-	e.HideBanner = true
-	e.Use(middleware.Recover())
-	e.GET("/", trashbinServerSocketFunc)
-	e.Logger.Fatal(e.Start(fmt.Sprintf(":%d", r.desiredPort)))
+	http.Handle("/", websocket.Handler(trashbinServerSocketFunc))
+	log.Printf("Starting web server on :%d\n", r.desiredPort)
+	if err := http.ListenAndServe(fmt.Sprintf(":%d", r.desiredPort), nil); err != nil {
+		log.Fatal("ListenAndServe:", err)
+	}
 }
