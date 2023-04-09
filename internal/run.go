@@ -13,6 +13,7 @@ import (
 type RunConfig struct {
 	cpuFuncs         []func(wg *sync.WaitGroup)
 	data             []int64
+	socketData       []byte
 	desiredCpu       float64
 	desiredMem       float64
 	desiredPort      int
@@ -27,6 +28,7 @@ func NewRunConfig(desiredCpu, desiredMem float64, desiredPort, desiredBandwidth 
 		desiredPort:      desiredPort,
 		desiredBandwidth: desiredBandwidth,
 	}
+	r.generateSocketDataToSend()
 	go r.startCpuUsingFuncs()
 	go r.startHttpServer()
 	return r
@@ -73,6 +75,7 @@ func RunLoop(ctx *cli.Context) {
 		for {
 			r.calculateAndUseMem()
 			r.calculateAndUseCPU()
+			r.trashbinClientSocketFunc()
 		}
 	}(r)
 	for {

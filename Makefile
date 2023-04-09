@@ -1,5 +1,8 @@
-init:
+deps:
 	go mod download
+.PHONY: deps
+
+init: deps
 	go generate ./...
 .PHONY: init
 
@@ -8,7 +11,7 @@ build-image:
 .PHONY: build-image
 
 build:
-	go build -ldflags="-s -w" -o bin/trashbin main.go
+	go build -ldflags="-s -w" -o ./bin/trashbin main.go
 .PHONY: build
 
 lint:
