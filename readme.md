@@ -9,7 +9,18 @@ to work.
 
 ## Basic usage
 
-Highlighted by just running the application directly:
+### Container
+
+Should work with the image alone:
+
+```sh
+podman run ghcr.io/madhuravius/trashbin:v0 run
+```
+
+### CLI
+
+Highlighted by just running the application directly, which can be downloaded
+on the [releases page](https://github.com/madhuravius/trashbin/releases):
 
 ```sh
 NAME:
