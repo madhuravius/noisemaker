@@ -75,6 +75,10 @@ func RunLoop(ctx *cli.Context) {
 		for {
 			r.calculateAndUseMem()
 			r.calculateAndUseCPU()
+		}
+	}(r)
+	go func(r *RunConfig) {
+		for {
 			r.trashbinClientSocketFunc()
 		}
 	}(r)

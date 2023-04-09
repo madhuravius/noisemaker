@@ -15,7 +15,6 @@ func loadCPUFunc(wg *sync.WaitGroup) {
 	done := make(chan int)
 	go func() {
 		for {
-
 			select {
 			case <-done:
 				return
@@ -24,7 +23,7 @@ func loadCPUFunc(wg *sync.WaitGroup) {
 			}
 		}
 	}()
-	time.Sleep(CPUPollingTime / 10)
+	time.Sleep(CPUPollingTime)
 	close(done)
 }
 

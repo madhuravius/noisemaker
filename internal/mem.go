@@ -16,7 +16,7 @@ func (r *RunConfig) calculateAndUseMem() {
 		for i := 0; i < ArrayChunkSize*ArrayChunkSize*25; i++ {
 			r.data = append(r.data, 1)
 		}
-	} else if len(r.data) > ArrayChunkSize {
+	} else if r.getUsedMemory() > r.desiredMem && len(r.data) > ArrayChunkSize {
 		_, r.data = r.data[0], r.data[ArrayChunkSize:]
 	}
 }
