@@ -1,3 +1,4 @@
+Copyright (c) 2013 The Gorilla WebSocket Authors. All rights reserved.
 Copyright (c) 2023 madhuravius
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
