@@ -34,8 +34,11 @@ COMMANDS:
    help, h  Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
-   --cpu value  as a percentage, specify the percentage of CPU you would like to use (default: 50)
-   --mem value  as a percentage, specify the percentage of RAM you would like to use (default: 50)
+   --cpu value        as a percentage, specify the percentage of CPU you would like to use. Max: 99 (default: 50)
+   --mem value        as a percentage, specify the percentage of RAM you would like to use. Max: 99 (default: 50)
+   --bandwidth value  in MBps, specify how much bandwidth you want to use upload/download (default: 5)
+   --port value       specify port you wish to run the web server for stressing (default: 3000)
+   --help, -h         show help
 ```
 
 ## Why?
