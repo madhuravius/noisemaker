@@ -10,6 +10,6 @@ RUN make build
 
 # cannot use scratch image as some bits are needed for the webserver
 FROM docker.io/debian:stable-slim
-COPY --from=build /app/bin/trashbin /app/bin/trashbin
+COPY --from=build /app/bin/noisemaker /app/bin/noisemaker
 
-ENTRYPOINT ["/app/bin/trashbin"]
+ENTRYPOINT ["/app/bin/noisemaker"]

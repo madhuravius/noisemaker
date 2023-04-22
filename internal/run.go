@@ -79,7 +79,7 @@ func RunLoop(ctx *cli.Context) {
 	}(r)
 	go func(r *RunConfig) {
 		for {
-			r.trashbinClientSocketFunc()
+			r.noisemakerClientSocketFunc()
 		}
 	}(r)
 	for {

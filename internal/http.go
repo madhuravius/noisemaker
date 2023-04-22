@@ -19,8 +19,8 @@ func (r *RunConfig) generateSocketDataToSend() {
 	_, _ = rand.Read(r.socketData)
 }
 
-// trashbinServerSocketFunc - send data on server
-func trashbinServerSocketFunc(w http.ResponseWriter, r *http.Request) {
+// noisemakerServerSocketFunc - send data on server
+func noisemakerServerSocketFunc(w http.ResponseWriter, r *http.Request) {
 	c, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Print("Err on conn upgrade:", err)
@@ -46,12 +46,12 @@ func trashbinServerSocketFunc(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// trashbinClientSocketFunc - send data from client
+// noisemakerClientSocketFunc - send data from client
 // taken from here: https://github.com/gorilla/websocket/blob/master/examples/echo/client.go
 // this is now deprecated/archive-only so we probably shouldn't use this but it doesn't appear there are
 // a lot of alternative packages yet:
 // https://www.reddit.com/r/golang/comments/zh0w0p/gorilla_web_toolkit_is_now_in_archive_only_mode/
-func (r *RunConfig) trashbinClientSocketFunc() {
+func (r *RunConfig) noisemakerClientSocketFunc() {
 	u := url.URL{Scheme: "ws", Host: fmt.Sprintf("localhost:%d", r.desiredPort), Path: "/"}
 	c, _, err := gorilla_ws.DefaultDialer.Dial(u.String(), nil)
 	if err != nil {
@@ -102,7 +102,7 @@ func (r *RunConfig) trashbinClientSocketFunc() {
 
 // startHttpServer - start http server with websocket
 func (r *RunConfig) startHttpServer() {
-	http.HandleFunc("/", trashbinServerSocketFunc)
+	http.HandleFunc("/", noisemakerServerSocketFunc)
 	log.Printf("Starting web server on :%d\n", r.desiredPort)
 	if err := http.ListenAndServe(fmt.Sprintf(":%d", r.desiredPort), nil); err != nil {
 		log.Fatal("ListenAndServe:", err)
