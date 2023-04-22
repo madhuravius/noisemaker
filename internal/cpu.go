@@ -7,24 +7,28 @@ import (
 	"github.com/shirou/gopsutil/cpu"
 )
 
+const (
+	FibSize = 10
+)
+
+func fibonacci(n int) int {
+	if n <= 1 {
+		return n
+	}
+	return fibonacci(n-1) + fibonacci(n-2)
+}
+
 // loadCPUFunc - run CPU load in specify cores count and percentage
-// adapted somewhat from: https://stackoverflow.com/a/41084841
-// TODO - may want to write a better more predictable CPU user since this is very all/nothing
 func loadCPUFunc(wg *sync.WaitGroup) {
 	defer wg.Done()
-	done := make(chan int)
-	go func() {
-		for {
-			select {
-			case <-done:
-				return
-			//nolint:staticcheck
-			default:
-			}
+	timeStarted := time.Now()
+	for {
+		if time.Now().After(timeStarted.Add(CPUPollingTime)) {
+			break
 		}
-	}()
-	time.Sleep(CPUPollingTime)
-	close(done)
+		_ = fibonacci(FibSize)
+		time.Sleep(10 * time.Microsecond)
+	}
 }
 
 func (r *RunConfig) getUsedCpu() float64 {
@@ -51,9 +55,9 @@ func (r *RunConfig) startCpuUsingFuncs() {
 	for {
 		if len(r.cpuFuncs) > 0 {
 			wg := sync.WaitGroup{}
-			for _, cpuFunc := range r.cpuFuncs {
+			for _, fn := range r.cpuFuncs {
 				wg.Add(1)
-				go cpuFunc(&wg)
+				go fn(&wg)
 			}
 			wg.Wait()
 		}
