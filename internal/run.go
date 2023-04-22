@@ -10,8 +10,11 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
+// cpuFunc - functions that end every internal.CPUPollingTime
+type cpuFunc func(wg *sync.WaitGroup)
+
 type RunConfig struct {
-	cpuFuncs         []func(wg *sync.WaitGroup)
+	cpuFuncs         []cpuFunc
 	data             []int64
 	socketData       []byte
 	desiredCpu       float64

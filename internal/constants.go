@@ -9,6 +9,6 @@ const (
 	BandwidthContextKey = "bandwidth"
 	PortContextKey      = "port"
 	DebugLogInterval    = time.Second * 3
-	CPUPollingTime      = time.Millisecond * 10
+	CPUPollingTime      = time.Millisecond * 100
 	FileSizeToSend      = 100 // MB
 )
