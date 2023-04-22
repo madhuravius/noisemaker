@@ -6,12 +6,12 @@ import (
 
 	"github.com/urfave/cli/v2" // imports as package "cli"
 
-	"trashbin/internal"
+	"noisemaker/internal"
 )
 
 func main() {
 	app := &cli.App{
-		Name:  "trashbin",
+		Name:  "noisemaker",
 		Usage: "needlessly consume resources and throw it in the bin",
 		Commands: []*cli.Command{
 			{
@@ -19,7 +19,7 @@ func main() {
 				Aliases: []string{""},
 				Usage:   "start the trashcan",
 				Action: func(cCtx *cli.Context) error {
-					log.Println("Starting trashbin run")
+					log.Println("Starting noisemaker run")
 					internal.RunLoop(cCtx)
 					return nil
 				},

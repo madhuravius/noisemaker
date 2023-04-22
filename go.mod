@@ -1,4 +1,4 @@
-module trashbin
+module noisemaker
 
 go 1.20
 

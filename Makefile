@@ -7,11 +7,11 @@ init: deps
 .PHONY: init
 
 build-image:
-	podman build -t trashbin .
+	podman build -t noisemaker .
 .PHONY: build-image
 
 build:
-	go build -ldflags="-s -w" -o ./bin/trashbin main.go
+	go build -ldflags="-s -w" -o ./bin/noisemaker main.go
 .PHONY: build
 
 lint:

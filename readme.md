@@ -1,4 +1,4 @@
-# trashbin
+# noisemaker
 
 Simple load testing tool that could be run as a lightweight docker container or standalone binary. 
 This will probably not work very well on machines with a single core cpu (untested). 
@@ -14,20 +14,20 @@ to work.
 Should work with the image alone:
 
 ```sh
-podman run ghcr.io/madhuravius/trashbin:v0.1.3 run
+podman run ghcr.io/madhuravius/noisemaker:v0.1.3 run
 ```
 
 ### CLI
 
 Highlighted by just running the application directly, which can be downloaded
-on the [releases page](https://github.com/madhuravius/trashbin/releases):
+on the [releases page](https://github.com/madhuravius/noisemaker/releases):
 
 ```sh
 NAME:
-   trashbin - needlessly consume resources and throw it in the bin
+   noisemaker - needlessly consume resources and throw it in the bin
 
 USAGE:
-   trashbin [global options] command [command options] [arguments...]
+   noisemaker [global options] command [command options] [arguments...]
 
 COMMANDS:
    run,     start the trashcan
