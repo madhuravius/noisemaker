@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/gorilla/websocket v1.5.0
 	github.com/shirou/gopsutil v3.21.11+incompatible
-	github.com/urfave/cli/v2 v2.25.4
+	github.com/urfave/cli/v2 v2.25.6
 )
 
 require (
